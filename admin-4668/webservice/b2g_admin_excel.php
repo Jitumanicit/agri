@@ -2,7 +2,7 @@
 	include_once("../../config/config.php");
 	$output = '';
 	if (isset($_POST["export_excel"])) {
-			$sql = "SELECT * FROM tbl_users WHERE branch = ''";
+			$sql = "SELECT * FROM tbl_users WHERE branch = 'b2g'";
 			$result = mysqli_query($link, $sql);
 			if(mysqli_num_rows($result) > 0){
 				$output .= '<table class="table" bordered="1">
@@ -27,6 +27,7 @@
 									<th>State</th>
 									<th>Pin</th>
 									<th>Country</th>
+									<th>Branch</th>
 									<th>Register At</th>
 								</tr>
 				';
@@ -54,12 +55,13 @@
 							<td>'.$row["state"].'</td>
 							<td>'.$row["pin"].'</td>
 							<td>'.$row["country"].'</td>
+							<td>'.$row["branch"].'</td>
 							<td>'.$row["created_at"].'</td>
 						</tr>';
 				}
 				$output .='</table>';
 				header("Content-Type: application/xls");
-				header("Content-Disposition: attachment; filename=all_delegates.xls");
+				header("Content-Disposition: attachment; filename=all_b2g_users.xls");
 				echo $output;
 			}
 		}

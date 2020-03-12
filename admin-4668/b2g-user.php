@@ -1,7 +1,7 @@
         <?php require_once('header.php'); ?>
         <?php 
           include_once("class/fetch-data.php");
-          $delegates_list=new fetch_data();
+          $b2g_delegates_list=new fetch_data();
         ?>
         <!-- End of Topbar -->
 
@@ -10,7 +10,7 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Delegate List</h6>
+              <h6 class="m-0 font-weight-bold text-primary">B2G Delegates List</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -29,26 +29,15 @@
                     <a class="dropdown-item" id="category-exhibitor">Exhibitor</a>
                   </div>
                 <button style="border: none; background: transparent;">
-                  <form action="webservice/delegates_admin_excel.php" method="post">
+                  <form action="webservice/b2g_admin_excel.php" method="post">
                     <input type="submit" name="export_excel" class="btn btn-info btn-sm" value="Excel Download">
                   </form>
                 </button>
-                <button type="button"class="btn btn-secondary btn-sm"id="send_email">Send Email</button>
-                <!-- Example split danger button -->
-                <div class="btn-group">
-                  <button type="button" class="btn btn-warning btn-sm">SMS</button>
-                  <button type="button" class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal">Write SMS</a>
-                    <a class="dropdown-item" id="send_sms">Send SMS</a>
-                  </div>
-                </div>
                 <table class="table table-bordered able-striped" id="dataTable" width="100%" cellspacing="0">
                   <thead style="font-size: 13px;">
                     <tr>
                       <th><input type="checkbox" id="checkAll"></th>
+                      <th>Sr No</th>
                       <th>Name</th>
                       <th>Mobile</th>
                       <th>Email</th>
@@ -64,14 +53,16 @@
                       <th>Status</th>
                     </tr>
                   </thead>
-                  <tbody style="font-size: 14px;">
+                  <tbody  style="font-size: 14px;">
                     <?php
-                      $sql=$delegates_list->all_delegate_list();
+                      $sql=$b2g_delegates_list->all_b2g_delegates_list();
+                      $c = 0;
                       while($row=mysqli_fetch_array($sql))
                       {
                     ?>
                     <tr>
                       <td><input class="checkbox" type="checkbox" name="id[]" id="<?php echo $row['mobile'] ?>"></td>
+                      <td><?php echo ++$c; ?></td>
                       <td><?php echo $row['fname'].$row['mname'].$row['lname'] ?></td>
                       <td><?php echo $row['mobile'] ?></td>
                       <td><?php echo $row['email'] ?></td>
@@ -91,7 +82,7 @@
                           echo "<a class='badge badge-danger' style='color:white;'>Not-Activated</a>";
                         }
                        ?>
-                      </td>
+                      </td>                      
                     </tr>
                     <?php } ?>
                   </tbody>
@@ -103,23 +94,7 @@
         <!-- /.container-fluid -->
       </div>
       <!-- End of Main Content -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-center" id="exampleModalLabel">SMS Content</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <textarea name="mobile_sms" id="mobile_sms" class="form-control"></textarea>
-            </div>
-            <div class="modal-footer">
-            </div>
-          </div>
-        </div>
-      </div>
+
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
@@ -163,13 +138,10 @@
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
-
   <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
@@ -177,8 +149,7 @@
 
   <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
-</body>
-<script>
+  <script>
     $(document).ready(function(){
       $('#checkAll').click(function(){
         if(this.checked){
@@ -203,7 +174,6 @@
         alert('No record selected');
       }
     });
-
     function sendApprovel(dataArr){
       $.ajax({
         type    : 'post',
@@ -217,7 +187,6 @@
                   }
       });
     }
-
     $('#not_approved').click(function(){
       var dataArr = new Array();
       if($('input:checkbox:checked').length > 0){
@@ -451,33 +420,7 @@
                   }
       });
     }
-
-    $('#send_sms').click(function(){
-      var dataArr = new Array();
-      var send_mobile_sms = document.getElementById("mobile_sms").value;
-      if($('input:checkbox:checked').length > 0){
-        $('input:checkbox:checked').each(function(){
-          dataArr.push($(this).attr('id'));
-        });
-        //console.log(dataArr);
-        //$('#myModals1').modal('show');
-        sendSMS(dataArr, send_mobile_sms)
-      }else{
-        alert('No record selected');
-      }
-    });
-    function sendSMS(dataArr, send_mobile_sms){
-      $.ajax({
-        type    : 'post',
-        url     : 'webservice/ajax_admin_SMS.php',
-        data    : {'data' : dataArr, 'send_mobile_sms' : send_mobile_sms},
-        success : function(response){
-                    location.reload();
-                  },
-        error   : function(errResponse){
-                    alert(errResponse);
-                  }
-      });
-    }
   </script>
+</body>
+
 </html>

@@ -24,8 +24,8 @@ include_once('header.php');
 		                        <h6>VIEW PROFILE</h6>
 		                    </div>
 		                    <div class="item text-center" style="background-color: #ff6600;">
-		                        <a href="#"><i class="fa fa-handshake-o" aria-hidden="true"></i></a>
-		                        <h6>SCHEDULE A MEETING</h6>
+		                        <a href="schedule-meeting.php"><i class="fa fa-handshake-o" aria-hidden="true"></i></a>
+		                        <h6>SCHEDULE MEETING</h6>
 		                    </div>
 		                </div>
 		            </div>

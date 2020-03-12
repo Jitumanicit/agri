@@ -7,8 +7,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     exit;
 }
 include_once('header.php');
-include_once("admin-4668/class/fetch-data.php");
-    $b2b_list=new fetch_data();
 ?>
 <section class="welcome-section" style="padding-top: 30px;">
     <div class="container">
@@ -29,18 +27,19 @@ include_once("admin-4668/class/fetch-data.php");
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody style="font-size: 14px;">
+                    <tbody style="font-size: 12px;">
                         <?php
-                            $sql=$b2b_list->all_b2b_list();
-                            while($row=mysqli_fetch_array($sql))
-                            {
+                            include_once("config/config.php");
+                            $sql="SELECT tbl_users.id, tbl_users.fname, tbl_users.mname, tbl_users.lname,tbl_users.organisation, tbl_users.designation, tbl_users.sector FROM tbl_users WHERE tbl_users.branch = 'b2g'";
+                            $res = $link->query($sql);
+                            while($row=$res->fetch_assoc()){
                         ?>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td style="padding: 0.5rem;"><?= $row['fname'].$row['mname'].$row['lname'] ?></td>
+                            <td style="padding: 0.5rem;"><?= $row['organisation'] ?></td>
+                            <td style="padding: 0.5rem;"><?= $row['designation'] ?></td>
+                            <td style="padding: 0.5rem;"><?= $row['sector'] ?></td>
+                            <td style="padding: 0.5rem;"><a href="meeting-request.php?id=<?= $row['id'] ?>" class="btn btn-outline-danger btn-sm">Request</a></td>
                         </tr>
                         <?php } ?>
                     </tbody>

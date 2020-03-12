@@ -34,13 +34,13 @@ class fetch_data
 
  		public function all_approved_delegates_list()
  		{
- 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users WHERE activation_status = 1  ORDER BY id DESC");
+ 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users WHERE activation_status = 1 AND branch = ''  ORDER BY id DESC");
  			return $result;
  		}
 
  		public function all_unapproved_delegates_list()
  		{
- 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users WHERE activation_status != 1  ORDER BY id DESC");
+ 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users WHERE activation_status != 1 AND branch =''  ORDER BY id DESC");
  			return $result;
  		}
 
@@ -62,6 +62,21 @@ class fetch_data
  		public function unapproved_meeting_list()
  		{
  			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_meeting WHERE activation_status != 1 ORDER BY id DESC");
+ 			return $result;
+ 		}
+ 		public function all_b2g_delegates_list()
+ 		{
+ 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users WHERE branch = 'b2g' ORDER BY id DESC");
+ 			return $result;
+ 		}
+ 		public function b2g_schedule_meeting_list()
+ 		{
+ 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users, tbl_meeting WHERE tbl_users.branch = 'b2g'");
+ 			return $result;
+ 		}
+ 		public function b2g_all_meeting_list()
+ 		{
+ 			$result=mysqli_query($this->dbh,"SELECT * FROM tbl_users, tbl_meeting WHERE tbl_users.branch = 'b2g' AND tbl_meeting.activation_status = 1");
  			return $result;
  		}
 	}

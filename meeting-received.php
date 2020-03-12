@@ -32,7 +32,7 @@ include_once('header.php');
                     <tbody style="font-size: 14px;">
                         <?php
                             include_once("config/config.php");
-                            $sql="SELECT * FROM tbl_users, tbl_b2b, tbl_meeting WHERE tbl_users.register_id = tbl_b2b.register_id AND tbl_b2b.register_id = tbl_meeting.sender_register_id AND tbl_meeting.reciver_register_id = '".$_SESSION['register_id']."'";
+                            $sql="SELECT * FROM tbl_users, tbl_meeting WHERE tbl_users.register_id = tbl_meeting.sender_register_id AND tbl_meeting.reciver_register_id = '".$_SESSION['register_id']."'";
                             $res = $link->query($sql);
                             while($row=$res->fetch_assoc()){
                         ?>
